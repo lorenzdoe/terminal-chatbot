@@ -8,10 +8,12 @@ class Handler():
     chatbot: Chatbot
     prompt_actions: dict
     current_prompt: str
+    __passed_prompt: bool
 
     def __init__(self, chatbot: Chatbot) -> None:
         self.chatbot = chatbot
         self.current_prompt = ''
+        self.__passed_prompt = False
         self.prompt_actions = {
             'exit': lambda: sys.exit(0),
             'usage': self.handle_usage,
@@ -43,7 +45,8 @@ class Handler():
     
     def handle_read(self, file_path: str = None) -> None:
         # clear prompt
-        self.current_prompt = ''
+        if not self.__passed_prompt:
+            self.current_prompt = ''
 
         if file_path == None:
             file_path = askopenfilename(defaultextension='.txt', filetypes=[('Text Files', '*.txt'), ('All Files', '*.*')])
@@ -81,7 +84,8 @@ class Handler():
 
             elif current_argument in ('-p', '--prompt'):
                 self.current_prompt += current_value
-                print('handling following prompt: {}'.format(current_value))
+                print('\nhandling following prompt: {}'.format(current_value))
+                self.__passed_prompt = True
             
             elif current_argument in ('-h', '--help'):
                 print('Usage: {} [options...]'.format(argv[0]))
@@ -96,6 +100,11 @@ class Handler():
         self.parse_options(argv)
         print_instructions()
 
+        
+        if self.__passed_prompt:
+            self.__passed_prompt = False
+            self.handle_prompt()
+    
         while True:
             try:
                 self.current_prompt += input('\nprompt: ')

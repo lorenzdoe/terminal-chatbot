@@ -4,8 +4,7 @@ def print_instructions() -> None:
 Ctrl+C or exit  ... exit program
 save            ... save conversation
 usage           ... print usage
-read            ... read file
-          ''')
+read            ... read file''')
     
 def print_response_formatted(message: str) -> None:
     print('\n---------------  GPT  ---------------\n{}\n---------------  ---  ---------------'.format(message))
