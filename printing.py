@@ -3,6 +3,23 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import TerminalFormatter
 
+def color_word(word: str, color: str) -> str:
+    colors = {
+        'red': '\033[91m',
+        'green': '\033[92m',
+        'yellow': '\033[93m',
+        'blue': '\033[94m',
+        'magenta': '\033[95m',
+        'cyan': '\033[96m',
+    }
+    end_color = '\033[0m'
+    
+    if color not in colors:
+        return word  # without color if color is not found
+    else:
+        colored_word = colors[color] + word + end_color
+        return colored_word
+
 def format_code(text):
     # Find all code snippets in the text
     matches = re.findall(r'```(.*?)```', text, re.DOTALL)
@@ -14,11 +31,12 @@ def format_code(text):
             code = '\n'.join(match.strip().splitlines())  # Extract the code portion
             lexer = get_lexer_by_name(language)
             formatted_code = highlight(code, lexer, TerminalFormatter())
-            formatted_code = '```' + '\n'.join(formatted_code.splitlines()) + '\n```'  # Remove the extra line breaks
+            opening, end = color_word('CODE\n>>>', 'red'), color_word('\n<<<\nCODE END','red')
+            formatted_code = opening + '\n'.join(formatted_code.splitlines()) + end  # Remove the extra line breaks
             text = text.replace('```{}```'.format(match), formatted_code)
         except Exception as e:
             print(type(e))
-            print(e)
+            print('Error when formatting code: {}'.format(e))
 
     return text
 
