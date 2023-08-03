@@ -3,7 +3,7 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import TerminalFormatter
 
-def color_word(word: str, color: str) -> str:
+def color_string(word: str, color: str) -> str:
     colors = {
         'red': '\033[91m',
         'green': '\033[92m',
@@ -31,7 +31,7 @@ def format_code(text):
             code = '\n'.join(match.strip().splitlines())  # Extract the code portion
             lexer = get_lexer_by_name(language)
             formatted_code = highlight(code, lexer, TerminalFormatter())
-            opening, end = color_word('CODE\n>>>', 'red'), color_word('\n<<<\nCODE END','red')
+            opening, end = color_string('CODE\n>>>', 'red'), color_string('\n<<<\nCODE END','red')
             formatted_code = opening + '\n'.join(formatted_code.splitlines()) + end  # Remove the extra line breaks
             text = text.replace('```{}```'.format(match), formatted_code)
         except Exception as e:
@@ -49,7 +49,8 @@ read            ... read file''')
     
 def print_response_formatted(response: str) -> None:
     response_formatted = format_code(response)
-    print('\n---------------  GPT  ---------------\n{}\n---------------  ---  ---------------'.format(response_formatted))
+    opener, end = color_string('---------------  GPT  ---------------', 'magenta'), color_string('---------------  ---  ---------------', 'magenta')
+    print('\n{}\n{}\n{}'.format(opener, response_formatted, end))
 
 def print_usage() -> None:
     print('''
