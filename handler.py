@@ -111,5 +111,6 @@ class Handler():
                 self.handle_prompt()
             except SystemExit:
                 break
-            except:
-                print('continue dialogue ...\n')
+            except Exception as e:
+                print('\nError: {}'.format(e))
+                print('\ncontinue dialogue ...')
