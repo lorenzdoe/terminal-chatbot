@@ -30,7 +30,7 @@ class Chatbot:
         response = openai.ChatCompletion.create(
             model=self.__model,
             messages=self.conversation,
-            temperature=0.7,
+            temperature=0.9,
             n=1,
             stop=None,
         )

@@ -31,12 +31,12 @@ def format_code(text):
             code = '\n'.join(match.strip().splitlines())  # Extract the code portion
             lexer = get_lexer_by_name(language)
             formatted_code = highlight(code, lexer, TerminalFormatter())
-            opening, end = color_string('CODE\n>>>', 'red'), color_string('\n<<<\nCODE END','red')
+            opening, end = color_string('>>>', 'red'), color_string('\n<<<','red')
             formatted_code = opening + '\n'.join(formatted_code.splitlines()) + end  # Remove the extra line breaks
             text = text.replace('```{}```'.format(match), formatted_code)
         except Exception as e:
-            print(type(e))
-            print('Error when formatting code: {}'.format(e))
+            # unknown pattern matcher
+            pass
 
     return text
 
