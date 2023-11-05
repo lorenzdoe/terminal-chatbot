@@ -7,7 +7,6 @@ OpenAI key needs to be exported to OPENAI_API_KEY environment variable
 import sys
 import signal
 from tkinter import Tk
-from api import Chatbot
 from handler import Handler
 
 # define signal handler functions
@@ -23,10 +22,7 @@ if __name__ == '__main__':
     root = Tk()
     # Hide root window
     root.withdraw()
-    chatbot: Chatbot = Chatbot()
-    chatbot.set_model('gpt-3.5-turbo')
-    # chatbot.set_model('gpt-4')
-    handler: Handler = Handler(chatbot)
 
     # starts the conversation
+    handler: Handler = Handler()
     handler.convo(sys.argv)

@@ -21,6 +21,9 @@ class Chatbot:
     def set_model(self, model: str) -> None:
         self.__model = model
     
+    def get_model(self) -> str:
+        return self.__model
+
     def get_response(self, prompt: str) -> str:
         # append the prompt to the convo
         self.conversation.append({'role': 'user', 'content': prompt})
