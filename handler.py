@@ -90,7 +90,7 @@ class Handler():
                 self.__passed_prompt = True
 
             elif current_argument in ('-m', '--model'):
-                model = 'gpt-4' if current_value == '4' else 'gpt-3.5-turbo'
+                model = 'gpt-4-1106-preview' if current_value == '4' else 'gpt-3.5-turbo'
                 self.chatbot.set_model(model)
             
             elif current_argument in ('-h', '--help'):
