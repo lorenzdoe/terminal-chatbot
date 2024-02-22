@@ -25,6 +25,12 @@ To use the GPT Chatbot for the Command Line, follow these steps:
    pip install -r requirements.txt
    ```
 
+   You may need to install `tkinter` for file dialogues
+   
+   ```bash
+   sudo apt-get install python3-tk
+   ```
+
 4. Export your OpenAI API key as an environment variable:
 
    ```bash
