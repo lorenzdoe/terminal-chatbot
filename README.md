@@ -21,6 +21,13 @@ To use the GPT Chatbot for the Command Line, follow these steps:
 
 3. Install the required dependencies:
 
+   Optional: Create and acitvate a virtual environment
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+   Install the required packages
    ```bash
    pip install -r requirements.txt
    ```
@@ -66,9 +73,24 @@ read            ... read file
 ```
 read and save opens file dialogue to select location
 
-### create single executable file using pyinstaller
+### Make the chatbot available from any directory
+
+#### Option 1: pyinstaller
+
+You can use `pyinstaller` to create a standalone executable that can be run from any directory. To do this, run the following command:
+
 ```bash
 pyinstaller --onefile main.py
+```
+
+This will create a standalone executable in the `dist` directory. You can then move this executable to a location that is included in your `PATH` environment variable to make it accessible from any directory.
+
+#### Option 2: custom alias
+
+You can create a custom alias to run the chatbot from any directory. To do this, add the following line to your `.bashrc` or `.zshrc` file:
+
+```txt
+alias gpt="python3 /path/to/terminal-chatbot/main.py"
 ```
 
 ## Customization
