@@ -12,38 +12,34 @@ from api import Chatbot
 from printing import print_instructions, print_response_formatted, print_usage
 
 class Handler():
-    chatbot:            Chatbot
-    prompt_actions:     dict
-    current_prompt:     str
-    __passed_prompt:    bool
-    headless_mode:      bool    = False
-    default_model:      str     = 'gpt-3.5-turbo-0125'
-    read_memory:        str     = ''
 
     def __init__(self, headless: bool = False) -> None:
-        chatbot: Chatbot = Chatbot()
-        chatbot.set_model(self.default_model)
-        self.chatbot = chatbot
-        self.current_prompt = ''
-        self.headless_mode = headless
-        self.__passed_prompt = False
+        self.chatbot:           Chatbot = Chatbot()
+        self.default_model:     str     = 'gpt-3.5-turbo-0125'
+        self.current_prompt:    str     = ''
+        self.headless_mode:     bool    = headless
+        self.short_memory:      str     = ''        # memory for reading from file
+        self.__passed_prompt:   bool    = False     # flag for passed prompt (as argument) -> handle it instantly
+        self.chatbot.set_model(self.default_model)
+        self.__setup_prompt_actions()
+    
+    def __setup_prompt_actions(self) -> None:
         self.prompt_actions = {
             'exit': lambda: sys.exit(0),
-            'usage': self.handle_usage,
-            'save': self.handle_save,
-            'read': self.handle_read,
+            'usage': self.__display_usage,
+            'save': self.__save_conversation,
+            'read': self.__read_from_file,
             '': lambda: None
         }
 
-    def handle_usage(self) -> None:
-        # clear prompt and print instructions
+    def __display_usage(self) -> None:
+        """Prints the usage instructions."""
         self.current_prompt = ''
         print_instructions()
 
-    def handle_save(self) -> None:
-        # clear prompt
+    def __save_conversation(self) -> None:
+        """Saves the conversation to a file."""
         self.current_prompt = ''
-
         file_path: str = asksaveasfilename(defaultextension='.md', filetypes=[('Text Files', '*.txt'), ('All Files', '*.*')]) if not self.headless_mode else input('Enter file name: ')
         file_path = file_path if file_path.endswith('.md') else file_path + '.md'
 
@@ -57,17 +53,17 @@ class Handler():
         except Exception as e:
             print(f'\nAn error occurred while writing the file: {str(e)}')
     
-    def handle_read(self, file_path: str = None) -> None:
-        # clear prompt
-        if not self.__passed_prompt:
-            self.current_prompt = ''
+    def __read_from_file(self, file_path: str = None) -> None:
+        """Reads the content of a file and appends it to the read memory."""
+
+        self.current_prompt = ''
 
         if file_path == None:
             file_path = askopenfilename(defaultextension='.txt', filetypes=[('Text Files', '*.txt'), ('All Files', '*.*')]) if not self.headless_mode else input('Enter relative path: ')
 
         try:
             with open(file_path, 'r') as file:
-                self.read_memory += file.read()
+                self.short_memory += file.read()
             print(f'\nreading following file: {file_path}')
         except FileNotFoundError:
             print('\nFile not found.')
@@ -75,40 +71,43 @@ class Handler():
             print(f'\nAn error occurred while reading the file: {str(e)}')
 
 
-    def handle_prompt(self) -> None:
+    def __handle_prompt_input(self) -> None:
         action = self.prompt_actions.get(self.current_prompt)
         # handle case where there was read input but empty prompt -> call api
-        action = None if self.read_memory and not self.current_prompt else action
+        action = None if self.short_memory and not self.current_prompt else action
         if action:
             action()
         else:
-            full_prompt: str = self.read_memory + self.current_prompt
+            full_prompt: str = self.short_memory + self.current_prompt
             response: str = self.chatbot.get_response(full_prompt)
             print_response_formatted(response)
-            self.current_prompt = ''
-            self.read_memory = ''
+            self.current_prompt = ''    # reset prompt
+            self.short_memory    = ''    # reset read memory
     
     def parse_options(self, argv: list) -> None:
         short_options: str = 'hr:p:m:'
         long_options: list = ['help', 'read=', 'prompt=', 'model=']
 
         # parse the command-line arguments
-        arguments, values = getopt.getopt(argv[1:], short_options, long_options)
+        try:
+            arguments, values = getopt.getopt(argv[1:], short_options, long_options)
+        except getopt.GetoptError as err:
+            print(err)
+            print_usage()
+            sys.exit(2)
 
         # process arguments
         for current_argument, current_value in arguments:
             if current_argument in ('-r', '--read'):
-                self.handle_read(current_value)
-
+                self.__read_from_file(current_value)
             elif current_argument in ('-p', '--prompt'):
-                self.current_prompt += current_value
+                self.short_memory += current_value
+                self.__passed_prompt = True
                 print(f'\nhandling following prompt: {current_value}')
                 self.__passed_prompt = True
-
             elif current_argument in ('-m', '--model'):
                 model = 'gpt-4-turbo-preview' if current_value == '4' else self.default_model
                 self.chatbot.set_model(model)
-            
             elif current_argument in ('-h', '--help'):
                 print(f'Usage: {argv[0]} [options...]')
                 print_usage()
@@ -118,21 +117,21 @@ class Handler():
         # treat remaining arguments as prompt and append it to the prompt
         self.current_prompt += ' '.join(values)
 
-    def convo(self, argv: list) -> None:
+    def initiate_conversation(self, argv: list) -> None:
         self.parse_options(argv)
         print_instructions()
         print(f"\nmodel: {self.chatbot.get_model()}")
         
+        # if prompt was passed as argument, handle it instantly without waiting for user input
         if self.__passed_prompt:
             self.__passed_prompt = False
-            self.handle_prompt()
+            self.__handle_prompt_input()
     
         # main converstion loop
         while True:
             try:
-                prompt = input('\nprompt: ')
-                self.current_prompt += prompt
-                self.handle_prompt()
+                self.current_prompt = input('\nPrompt: ')
+                self.__handle_prompt_input()
             except SystemExit:
                 break
             except Exception as e:

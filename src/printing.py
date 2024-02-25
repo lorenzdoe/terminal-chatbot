@@ -57,5 +57,6 @@ def print_usage() -> None:
  -h, --help             print the help for the program
  -p, --prompt           pass a prompt for processing
  -r, --read <file>      pass a file to be read
+                        pass multiple -r flags to read multiple files
  -m, --model <version>  pass 4 for gpt-4, default is gpt-3.5-turbo
 ''')

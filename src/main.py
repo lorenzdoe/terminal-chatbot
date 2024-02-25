@@ -31,4 +31,4 @@ if __name__ == '__main__':
 
     # starts the conversation
     handler: Handler = Handler(headless=HEADLESS)
-    handler.convo(sys.argv)
+    handler.initiate_conversation(sys.argv)
