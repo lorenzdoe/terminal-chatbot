@@ -1,10 +1,12 @@
+"""
+Chatbot that uses the OPENAI api
+api key needs to be set at OPENAI_API_KEY environment variable
+"""
 
 import os
 import openai
 from dotenv import load_dotenv
 
-# Chatbot that uses the OPENAI api
-# api key needs to be set at OPENAI_API_KEY environment variable
 class Chatbot:
     __api_key: str
     __model: str
