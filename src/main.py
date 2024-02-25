@@ -23,10 +23,8 @@ signal.signal(signal.SIGINT, signal_handler_exit)
 
 if __name__ == '__main__':
     try:
-        # create Tkinter root window
-        root = Tk()
-        # Hide root window
-        root.withdraw()
+        root = Tk()        # create Tkinter root window
+        root.withdraw()    # Hide root window
     except TclError:
         HEADLESS = True
         print("INFO: No display found. Running in headless mode.")
