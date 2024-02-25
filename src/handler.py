@@ -12,12 +12,12 @@ from api import Chatbot
 from printing import print_instructions, print_response_formatted, print_usage
 
 class Handler():
-    chatbot: Chatbot
-    prompt_actions: dict
-    current_prompt: str
-    __passed_prompt: bool
-    headless_mode: bool = False
-    default_model: str = 'gpt-3.5-turbo-0125'
+    chatbot:            Chatbot
+    prompt_actions:     dict
+    current_prompt:     str
+    __passed_prompt:    bool
+    headless_mode:      bool    = False
+    default_model:      str     = 'gpt-3.5-turbo-0125'
 
     def __init__(self, headless: bool = False) -> None:
         chatbot: Chatbot = Chatbot()
