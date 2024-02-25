@@ -49,7 +49,7 @@ read            ... read file''')
     
 def print_response_formatted(response: str) -> None:
     response_formatted = format_code(response)
-    opener, end = color_string('~~~~~~~~~~~~~~~~~~~~  GPT  ~~~~~~~~~~~~~~~~~~~~', 'magenta'), color_string('~~~~~~~~~~~~~~~~~~~~  ~~~  ~~~~~~~~~~~~~~~~~~~~', 'magenta')
+    opener, end = color_string('====================  GPT  ====================', 'magenta'), color_string('====================  ===  ====================', 'magenta')
     print('\n{}\n{}\n{}'.format(opener, response_formatted, end))
 
 def print_usage() -> None:

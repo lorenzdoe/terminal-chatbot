@@ -6,8 +6,12 @@ OpenAI key needs to be exported to OPENAI_API_KEY environment variable
 '''
 import sys
 import signal
+
 from tkinter import Tk
 from handler import Handler
+from _tkinter import TclError
+
+HEADLESS: bool = False
 
 # define signal handler functions
 def signal_handler_exit(sig, frame) -> None:
@@ -18,11 +22,15 @@ def signal_handler_exit(sig, frame) -> None:
 signal.signal(signal.SIGINT, signal_handler_exit)
 
 if __name__ == '__main__':
-    # create Tkinter root window
-    root = Tk()
-    # Hide root window
-    root.withdraw()
+    try:
+        # create Tkinter root window
+        root = Tk()
+        # Hide root window
+        root.withdraw()
+    except TclError:
+        HEADLESS = True
+        print("INFO: No display found. Running in headless mode.")
 
     # starts the conversation
-    handler: Handler = Handler()
+    handler: Handler = Handler(headless=HEADLESS)
     handler.convo(sys.argv)
