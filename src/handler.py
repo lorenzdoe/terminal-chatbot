@@ -18,6 +18,7 @@ class Handler():
     __passed_prompt:    bool
     headless_mode:      bool    = False
     default_model:      str     = 'gpt-3.5-turbo-0125'
+    read_memory:        str     = ''
 
     def __init__(self, headless: bool = False) -> None:
         chatbot: Chatbot = Chatbot()
@@ -66,7 +67,7 @@ class Handler():
 
         try:
             with open(file_path, 'r') as file:
-                self.current_prompt += file.read()
+                self.read_memory += file.read()
             print(f'\nreading following file: {file_path}')
         except FileNotFoundError:
             print('\nFile not found.')
@@ -76,12 +77,16 @@ class Handler():
 
     def handle_prompt(self) -> None:
         action = self.prompt_actions.get(self.current_prompt)
+        # handle case where there was read input but empty prompt -> call api
+        action = None if self.read_memory and not self.current_prompt else action
         if action:
             action()
         else:
-            response: str = self.chatbot.get_response(self.current_prompt)
+            full_prompt: str = self.read_memory + self.current_prompt
+            response: str = self.chatbot.get_response(full_prompt)
             print_response_formatted(response)
             self.current_prompt = ''
+            self.read_memory = ''
     
     def parse_options(self, argv: list) -> None:
         short_options: str = 'hr:p:m:'
