@@ -126,7 +126,7 @@ Answer in bash if the message does not specify the language.""")
             elif current_argument in ('-t', '--translate'):
                 self.chatbot.set_system("""
 You are a helpful assistant designed to output nothing more than the corresponding translation for the message.
-Answer in english if the message does not specify the language.""")
+Default translation is english to german or vice versa if the message does not specify something else""")
                 self.short_memory += f'{current_value}\n'
                 self.__passed_prompt = True
         
