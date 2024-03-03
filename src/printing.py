@@ -49,14 +49,17 @@ read            ... read file''')
     
 def print_response_formatted(response: str) -> None:
     response_formatted = format_code(response)
-    opener, end = color_string('====================  GPT  ====================', 'magenta'), color_string('====================  ===  ====================', 'magenta')
+    opener, end = color_string('====================  GPT  ====================', 'red'), color_string('====================  ===  ====================', 'red')
     print('\n{}\n{}\n{}'.format(opener, response_formatted, end))
 
 def print_usage() -> None:
     print('''
- -h, --help             print the help for the program
- -p, --prompt           pass a prompt for processing
- -r, --read <file>      pass a file to be read
-                        pass multiple -r flags to read multiple files
- -m, --model <version>  pass 4 for gpt-4, default is gpt-3.5-turbo
+ -h, --help                   print the help for the program
+ -p, --prompt    <message>    pass a prompt for processing
+ -r, --read      <rel-path>   pass a file to be read
+                              pass multiple -r flags to read multiple files
+ -m, --model     <version>    pass 4 for gpt-4, default is gpt-3.5-turbo
+ -c, --code      <message>    pass a message to produce code, default is python
+ -s, --shell     <message>    pass a message to produce shell command, default is bash
+ -t, --translate <message>    pass a message to produce translation, default is english
 ''')
