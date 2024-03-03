@@ -116,3 +116,7 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 Produce code for given input 
 
 <img src="img/code-example.png">
+
+Read files and process prompt
+
+<img src="img/read-example.png">
