@@ -110,3 +110,9 @@ If you find any issues with the GPT Chatbot for the Command Line or have suggest
 ## License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+## Examples
+
+Produce code for given input 
+
+<img src="img/code-example.png">
