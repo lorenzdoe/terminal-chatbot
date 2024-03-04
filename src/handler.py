@@ -85,8 +85,8 @@ class Handler():
             self.short_memory    = ''    # reset read memory
     
     def parse_options(self, argv: list) -> None:
-        short_options: str = 'hr:p:m:'
-        long_options: list = ['help', 'read=', 'prompt=', 'model=']
+        short_options: str = 'hr:p:m:c:s:t:'
+        long_options: list = ['help', 'read=', 'prompt=', 'model=', 'code=', 'shell=', 'translate=']
 
         # parse the command-line arguments
         try:
@@ -101,10 +101,9 @@ class Handler():
             if current_argument in ('-r', '--read'):
                 self.__read_from_file(current_value)
             elif current_argument in ('-p', '--prompt'):
-                self.short_memory += current_value
+                self.short_memory += f'{current_value}'
                 self.__passed_prompt = True
                 print(f'\nhandling following prompt: {current_value}')
-                self.__passed_prompt = True
             elif current_argument in ('-m', '--model'):
                 model = 'gpt-4-turbo-preview' if current_value == '4' else self.default_model
                 self.chatbot.set_model(model)
@@ -112,7 +111,24 @@ class Handler():
                 print(f'Usage: {argv[0]} [options...]')
                 print_usage()
                 sys.exit(0)
-
+            elif current_argument in ('-c', '--code'):
+                self.chatbot.set_system("""
+You are a helpful assistant designed to output nothing more than the corresponding code for the message. 
+Answer in python if the message does not specify the language.""")
+                self.short_memory += f'{current_value}\n'
+                self.__passed_prompt = True
+            elif current_argument in ('-s', '--shell'):
+                self.chatbot.set_system("""
+You are a helpful assistant designed to output nothing more than the corresponding shell command for the message.
+Answer in bash if the message does not specify the language.""")
+                self.short_memory += f'{current_value}\n'
+                self.__passed_prompt = True
+            elif current_argument in ('-t', '--translate'):
+                self.chatbot.set_system("""
+You are a helpful assistant designed to output nothing more than the corresponding translation for the message.
+Default translation is english to german or vice versa if the message does not specify something else""")
+                self.short_memory += f'{current_value}\n'
+                self.__passed_prompt = True
         
         # treat remaining arguments as prompt and append it to the prompt
         self.current_prompt += ' '.join(values)

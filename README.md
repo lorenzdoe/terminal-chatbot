@@ -58,10 +58,14 @@ The chatbot is also capable of reading files and saving conversations to given f
 
 ```
 Usage: main.py [options...]
- -h, --help             print the help for the program
- -p, --prompt           pass a prompt for processing
- -r, --read <file>      pass a file to be read
- -m, --model <version>  pass 4 for gpt-4, default is gpt-3.5-turbo
+ -h, --help                   print the help for the program
+ -p, --prompt    <message>    pass a prompt for processing
+ -r, --read      <rel-path>   pass a file to be read
+                              pass multiple -r flags to read multiple files
+ -m, --model     <version>    pass 4 for gpt-4, default is gpt-3.5-turbo
+ -c, --code      <message>    pass a message to produce code, default is python
+ -s, --shell     <message>    pass a message to produce shell command, default is bash
+ -t, --translate <message>    pass a message to produce translation, default is english
 ```
 
 after starting the program
@@ -106,3 +110,13 @@ If you find any issues with the GPT Chatbot for the Command Line or have suggest
 ## License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+## Examples
+
+Produce code for given input 
+
+<img src="img/code-example.png">
+
+Read files and process prompt
+
+<img src="img/read-example.png">
