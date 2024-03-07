@@ -120,7 +120,8 @@ Answer in python if the message does not specify the language.""")
             elif current_argument in ('-s', '--shell'):
                 self.chatbot.set_system("""
 You are a helpful assistant designed to output nothing more than the corresponding shell command for the message.
-Answer in bash if the message does not specify the language.""")
+Answer in bash if the message does not specify the language.
+If the input is a shell command, explain the command.""")
                 self.short_memory += f'{current_value}\n'
                 self.__passed_prompt = True
             elif current_argument in ('-t', '--translate'):
