@@ -62,7 +62,7 @@ Usage: main.py [options...]
  -p, --prompt    <message>    pass a prompt for processing
  -r, --read      <rel-path>   pass a file to be read
                               pass multiple -r flags to read multiple files
- -m, --model     <version>    pass 4 for gpt-4, default is gpt-3.5-turbo
+ -m, --model     <version>    pass 3 for gpt-3.5-turbo, default is gpt-4
  -c, --code      <message>    pass a message to produce code, default is python
  -s, --shell     <message>    pass a message to produce shell command, default is bash
  -t, --translate <message>    pass a message to produce translation, default is english

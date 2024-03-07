@@ -15,7 +15,7 @@ class Handler():
 
     def __init__(self, headless: bool = False) -> None:
         self.chatbot:           Chatbot = Chatbot()
-        self.default_model:     str     = 'gpt-3.5-turbo-0125'
+        self.default_model:     str     = 'gpt-4-turbo-preview'
         self.current_prompt:    str     = ''
         self.headless_mode:     bool    = headless
         self.short_memory:      str     = ''        # memory for reading from file
@@ -105,7 +105,7 @@ class Handler():
                 self.__passed_prompt = True
                 print(f'\nhandling following prompt: {current_value}')
             elif current_argument in ('-m', '--model'):
-                model = 'gpt-4-turbo-preview' if current_value == '4' else self.default_model
+                model = 'gpt-3.5-turbo-0125' if current_value == '3' else self.default_model
                 self.chatbot.set_model(model)
             elif current_argument in ('-h', '--help'):
                 print(f'Usage: {argv[0]} [options...]')
